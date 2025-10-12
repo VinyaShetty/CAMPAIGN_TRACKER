@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>View Campaigns</title>
+<style>
+body { font-family: 'Poppins', sans-serif; background: #007bff33; text-align: center; padding: 20px; }
+h1 { color: #007bff; }
+table { width: 90%; margin: 20px auto; border-collapse: collapse; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+th { background-color: #007bff; color: white; }
+button { padding: 10px 20px; border-radius: 8px; border: none; background: #333; color: white; cursor: pointer; margin-top: 20px; }
+button:hover { background: #000; }
+</style>
+</head>
+<body>
+<h1>📊 View Campaigns</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Campaign Name</th>
+      <th>Client Name</th>
+      <th>Start Date</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+<button onclick="window.location.href='index.html'">Back</button>
+
+<script>
+const API_URL = "http://127.0.0.1:5000/api/campaigns";
+async function loadCampaigns() {
+  const res = await fetch(API_URL);
+  const data = await res.json();
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  data.forEach(c => {
+    tbody.innerHTML += `<tr>
+      <td>${c.id}</td>
+      <td>${c.campaign_name}</td>
+      <td>${c.client_name}</td>
+      <td>${c.start_date}</td>
+      <td>${c.status}</td>
+    </tr>`;
+  });
+}
+loadCampaigns();
+</script>
+</body>
+</html>

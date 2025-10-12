@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Campaign</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #28a745, #85e085);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .container img {
+    width: 100px;
+    margin-bottom: 20px;
+    animation: float 3s infinite ease-in-out;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  h1 {
+    margin-bottom: 25px;
+    color: #28a745;
+  }
+
+  form input, form select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+
+  /* Unified button style */
+  .btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    color: white;
+    background: #28a745;
+  }
+
+  .btn:hover {
+    background: #1e7e34;
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="https://cdn-icons-png.flaticon.com/512/1048/1048953.png" alt="Campaign Icon">
+    <h1>➕ Add New Campaign</h1>
+    <form id="addForm">
+      <input type="text" id="campaign_name" placeholder="Campaign Name" required>
+      <input type="text" id="client_name" placeholder="Client Name" required>
+      <input type="date" id="start_date" required>
+      <select id="status">
+        <option value="Active">Active</option>
+        <option value="Paused">Paused</option>
+        <option value="Completed">Completed</option>
+      </select>
+      <button type="submit" class="btn">Add Campaign</button>
+    </form>
+    <button class="btn" onclick="window.location.href='index.html'">Back</button>
+  </div>
+
+<script>
+const API_URL = "http://127.0.0.1:5000/api/campaigns";
+
+document.getElementById('addForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const data = {
+    campaign_name: document.getElementById('campaign_name').value,
+    client_name: document.getElementById('client_name').value,
+    start_date: document.getElementById('start_date').value,
+    status: document.getElementById('status').value
+  };
+  await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  alert('Campaign Added Successfully!');
+  e.target.reset();
+});
+</script>
+
+</body>
+</html>

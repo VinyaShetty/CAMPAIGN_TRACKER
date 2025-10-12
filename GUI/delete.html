@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delete Campaign</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+  body {
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #dc3545, #f28a8a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container {
+    background: white;
+    width: 90%;
+    max-width: 450px;
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 { margin-bottom: 25px; color: #dc3545; }
+
+  input { 
+    width: 100%; 
+    padding: 12px; 
+    margin: 10px 0; 
+    border-radius: 10px; 
+    border: 1px solid #ccc; 
+    font-size: 16px; 
+  }
+
+  button { 
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 12px; 
+    border: none; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin-top: 15px; 
+    transition: 0.3s; 
+  }
+
+  .delete-btn { background: #dc3545; color: white; }
+  .delete-btn:hover { background: #a71d2a; transform: scale(1.05); }
+
+  .back-btn { background: #333; color: white; margin-top: 15px; }
+  .back-btn:hover { background: #000; transform: scale(1.05); }
+
+  img { width: 100px; margin-bottom: 20px; animation: float 3s infinite ease-in-out; }
+  @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Delete Icon">
+    <h1>❌ Delete Campaign</h1>
+    <form id="deleteForm">
+      <input type="number" id="delete_id" placeholder="Enter Campaign ID" required>
+      <button type="submit" class="delete-btn">Delete Campaign</button>
+    </form>
+    <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
+  </div>
+
+<script>
+const API_URL = "http://127.0.0.1:5000/api/campaigns";
+
+document.getElementById('deleteForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const id = document.getElementById('delete_id').value;
+  if(!id) return alert("Please enter a Campaign ID");
+  
+  const confirmDelete = confirm(`Are you sure you want to delete Campaign ID: ${id}?`);
+  if(!confirmDelete) return;
+
+  const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+  if(res.ok){
+    alert(`Campaign ID ${id} deleted successfully!`);
+    e.target.reset();
+  } else {
+    alert("Error deleting campaign. Make sure ID exists.");
+  }
+});
+</script>
+
+</body>
+</html>

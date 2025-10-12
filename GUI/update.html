@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Update Campaign</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; font-family: 'Poppins', sans-serif; }
+
+  body {
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(to right, #ffecd2, #fcb69f);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .update-container {
+    width: 90%;
+    max-width: 500px;
+    background: #ffffffcc;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    text-align: center;
+    animation: slideIn 0.7s ease forwards;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  h1 {
+    margin-bottom: 25px;
+    color: #ff7f50;
+    font-size: 2rem;
+    text-shadow: 1px 1px 2px #fff;
+  }
+
+  form input, form select {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+
+  form input:focus, form select:focus {
+    border-color: #ff7f50;
+    box-shadow: 0 0 10px rgba(255,127,80,0.5);
+    outline: none;
+  }
+
+  button {
+    padding: 12px 25px;
+    margin-top: 15px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .update-btn {
+    background: #ff7f50;
+    color: white;
+    width: 100%;
+  }
+
+  .update-btn:hover {
+    background: #ff6347;
+  }
+
+  .back-btn {
+    background: #555;
+    color: white;
+    margin-top: 15px;
+    width: 100%;
+  }
+
+  .back-btn:hover {
+    background: #333;
+  }
+
+  p.note {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 15px;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="update-container">
+  <h1>✏️ Update Campaign Status</h1>
+
+  <form id="updateForm">
+    <input type="number" id="update_id" placeholder="Enter Campaign ID" required>
+    <select id="update_status">
+      <option value="Active">Active</option>
+      <option value="Paused">Paused</option>
+      <option value="Completed">Completed</option>
+    </select>
+    <button type="submit" class="update-btn">Update Campaign</button>
+  </form>
+
+  <button class="back-btn" onclick="window.location.href='index.html'">Back to Dashboard</button>
+
+  <p class="note">Enter the ID of the campaign you want to update and select its new status.</p>
+</div>
+
+<script>
+  const API_URL = "http://127.0.0.1:5000/api/campaigns";
+
+  document.getElementById('updateForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('update_id').value;
+    const status = document.getElementById('update_status').value;
+
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      if(res.ok){
+        alert("✅ Campaign updated successfully!");
+        e.target.reset();
+      } else {
+        alert("⚠️ Failed to update. Check the Campaign ID.");
+      }
+    } catch (error) {
+      alert("⚠️ Error connecting to server.");
+      console.error(error);
+    }
+  });
+</script>
+
+</body>
+</html>

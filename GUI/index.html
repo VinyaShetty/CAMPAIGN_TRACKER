@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campaign Tracker</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #74ebd5, #acb6e5);
+  }
+
+  .splash, .menu {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .splash { color: white; font-size: 2rem; }
+
+  .menu { display: none; }
+
+  .btn {
+    display: block;
+    width: 220px;
+    padding: 15px;
+    margin: 15px auto;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+
+  .btn:hover { transform: scale(1.05); opacity: 0.9; }
+  .view-btn { background: #007bff; }
+  .add-btn { background: #28a745; }
+  .update-btn { background: #ffc107; color: black; }
+  .delete-btn { background: #dc3545; }
+
+  img { width: 120px; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <h1>Welcome to Campaign Tracker</h1>
+  <p>Loading dashboard...</p>
+</div>
+
+<div class="menu" id="menu">
+  <img src="https://cdn-icons-png.flaticon.com/512/1048/1048953.png" alt="Campaign Icon">
+  <h1>Campaign Tracker</h1>
+  <button class="btn view-btn" onclick="window.location.href='view.html'">View Campaigns</button>
+  <button class="btn add-btn" onclick="window.location.href='add.html'">Add Campaign</button>
+  <button class="btn update-btn" onclick="window.location.href='update.html'">Update Campaign</button>
+  <button class="btn delete-btn" onclick="window.location.href='delete.html'">Delete Campaign</button>
+</div>
+
+<script>
+  // Check if splash was already shown in this session
+  if(sessionStorage.getItem('splashShown')) {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('menu').style.display = 'flex';
+  } else {
+    // Show splash for 3 seconds
+    setTimeout(() => {
+      document.getElementById('splash').style.display = 'none';
+      document.getElementById('menu').style.display = 'flex';
+      sessionStorage.setItem('splashShown', 'true'); // mark splash as shown
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>
