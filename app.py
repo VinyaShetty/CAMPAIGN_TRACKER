@@ -1,18 +1,30 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-import mysql.connector
+import psycopg2
+from psycopg2.extras import RealDictCursor
+import os
 
 app = Flask(__name__)
 CORS(app)  # To allow frontend access
 
+# GUI folder path
+GUI_FOLDER = os.path.join(os.path.dirname(__file__), 'GUI')
+
 # Database connection
 def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",        # your MySQL username
-        password="root",    # your MySQL password
-        database="campaign_db"
+    return psycopg2.connect(
+        "postgresql://postgres:vinyashetty@db.ivqtqxeospfdweifjwaj.supabase.co:5432/postgres"
     )
+
+# Serve the main index page
+@app.route('/')
+def home():
+    return send_from_directory(GUI_FOLDER, 'index.html')
+
+# Serve other HTML files and static content from GUI folder
+@app.route('/<path:filename>')
+def serve_gui(filename):
+    return send_from_directory(GUI_FOLDER, filename)
 
 # Add a new campaign
 @app.route('/api/campaigns', methods=['POST'])
@@ -33,7 +45,7 @@ def add_campaign():
 @app.route('/api/campaigns', methods=['GET'])
 def get_campaigns():
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     cursor.execute("SELECT * FROM campaigns")
     campaigns = cursor.fetchall()
     cursor.close()
@@ -65,3 +77,6 @@ def delete_campaign(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# For Vercel deployment
+app = app
